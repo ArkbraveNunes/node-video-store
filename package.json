@@ -1,0 +1,40 @@
+{
+  "name": "video-store",
+  "version": "1.0.0",
+  "description": "Video Store Node Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node node_modules/nodemon/bin/nodemon.js server.js",
+    "test": "jest --runInBand --detectOpenHandles",
+    "lint": "eslint --fix . "
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArkbraveNunes/node-video-store.git"
+  },
+  "author": "Jean Santos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ArkbraveNunes/node-video-store/issues"
+  },
+  "homepage": "https://github.com/ArkbraveNunes/node-video-store#readme",
+  "dependencies": {
+    "@hapi/boom": "^9.1.2",
+    "custom-env": "^2.0.1",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.1",
+    "sequelize": "^6.6.2",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
+  }
+}
