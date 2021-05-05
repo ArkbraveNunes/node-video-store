@@ -14,3 +14,6 @@ Conectar com o mysql que esta rodando com o docker
 Executar o script localizado na pasta scripts.
 Rodar o comando "npm install" pra instalar dependências;
 Rodar o comando "npm start" para executar a aplicação;
+
+# Documentação da Aplicação (Swagger)
+http://localhost:3000/api-videostore-docs/#/
