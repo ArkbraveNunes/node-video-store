@@ -10,10 +10,6 @@
     {
       "name": "Root",
       "description": "Default's API Route"
-    },
-    {
-      "name": "Customer",
-      "description": "Customer configs"
     }
   ],
   "schemes": [
@@ -52,12 +48,13 @@
         }
       }
     },
-    "/v1/customer": {
+    "/v1/users": {
       "get": {
         "tags": [
-          "Customer"
+          "User"
         ],
-        "summary": "Search for Client",
+        "summary": "Serviço que efetua a busca de um usuário ou mais usuários no database",
+        "description": "",
         "parameters": [
           {
             "in": "header",
@@ -103,9 +100,9 @@
       },
       "post": {
         "tags": [
-          "Customer"
+          "User"
         ],
-        "summary": "Registry Client",
+        "summary": "Serviço que efetua o cadastro de um novo usuário no database.",
         "parameters": [
           {
             "in": "header",
@@ -139,12 +136,14 @@
             }
           }
         }
-      },
-      "put": {
+      }
+    },
+    "/v1/movies": {
+      "get": {
         "tags": [
-          "Customer"
+          "Movies"
         ],
-        "summary": "Update Client",
+        "summary": "Serviço que efetua a busca de um ou mais filmes no database.",
         "parameters": [
           {
             "in": "header",
@@ -152,26 +151,41 @@
             "type": "string"
           },
           {
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/CustomerSchemaBody"
-            }
+            "in": "query",
+            "name": "id",
+            "description": "Film id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "title",
+            "description": "Film title",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "quantity",
+            "description": "Film title",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "director",
+            "description": "Film director",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/CustomerSchemaReturn"
+              "$ref": "#/definitions/MovieSchemaReturn"
             }
+          },
+          "204": {
+            "description": "Sem conteúdo"
           },
           "400": {
-            "description": "Requisição inválida",
-            "schema": {
-              "$ref": "#/definitions/DefaultBoomResponse"
-            }
-          },
-          "401": {
             "description": "Unauthorized",
             "schema": {
               "$ref": "#/definitions/DefaultBoomResponse"
@@ -185,11 +199,52 @@
           }
         }
       },
-      "delete": {
+      "post": {
         "tags": [
-          "Customer"
+          "Movies"
         ],
-        "summary": "Delete for Client",
+        "summary": "Serviço que efetua o cadastro de um novo filme no database.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-tid",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/MovieSchemaBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MovieSchemaReturn"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/DefaultBoomResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "schema": {
+              "$ref": "#/definitions/DefaultBoomResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/rentRegister": {
+      "get": {
+        "tags": [
+          "Rental Movies Register"
+        ],
+        "summary": "Serviço que efetua a busca dos registros de locações(RENT) ou devoluções(DEVOLVE) de filmes.",
         "parameters": [
           {
             "in": "header",
@@ -198,25 +253,134 @@
           },
           {
             "in": "query",
-            "name": "flag",
+            "name": "id",
+            "description": "Record id",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "idUser",
+            "description": "User id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "action",
+            "description": "type action",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "idMovie",
+            "description": "Movie id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "quantity",
+            "description": "Leased Quantity",
+            "type": "number"
+          },
+          {
+            "in": "query",
+            "name": "value",
+            "description": "Rental Value",
+            "type": "number"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Feature Flag deletada."
-                }
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RentalRegisterSchemaReturn"
               }
             }
           },
           "204": {
-            "description": "Customer não encontrado para fazer a exclusão."
+            "description": "Sem conteúdo"
+          },
+          "400": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/DefaultBoomResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "schema": {
+              "$ref": "#/definitions/DefaultBoomResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Rental Movies Register"
+        ],
+        "summary": "Serviço que efetua o cadastro de uma locação(RENT) de um filme.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-tid",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RentalRegisterSchemaBodyPost"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RentalRegisterSchemaReturn"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/DefaultBoomResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "schema": {
+              "$ref": "#/definitions/DefaultBoomResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Rental Movies Register"
+        ],
+        "summary": "Serviço que efetua a atualização de um registro de locação de um filme, valor, quantidade e afins, além de possuir o propósito de fazer a alteração de dados do registro alterando o estado RENT para DEVOLVE.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-tid",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RentalRegisterSchemaBodyPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RentalRegisterSchemaReturn"
+            }
+          },
+          "204": {
+            "description": "Sem conteúdo"
           },
           "400": {
             "description": "Requisição inválida",
@@ -272,7 +436,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "_id": {
+          "id": {
             "type": "string"
           },
           "name": {
@@ -283,9 +447,6 @@
           },
           "password": {
             "type": "string"
-          },
-          "authentication": {
-            "type": "string"
           }
         }
       }
@@ -293,17 +454,138 @@
     "CustomerSchemaBody": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string",
-          "example": "seven"
+        "username": {
+          "type": "string"
         },
         "email": {
-          "type": "string",
-          "example": "seven"
+          "type": "string"
         },
         "password": {
+          "type": "string"
+        }
+      }
+    },
+    "MovieSchemaReturn": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "director": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "MovieSchemaBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "string"
+        },
+        "director": {
+          "type": "string"
+        }
+      }
+    },
+    "RentalRegisterSchemaReturn": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "idMovie": {
+          "type": "string"
+        },
+        "idAction": {
+          "type": "string"
+        },
+        "idUser": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "value": {
+          "type": "number"
+        },
+        "initDate": {
           "type": "string",
-          "example": "seven"
+          "example": "2020-03-20T00:00:00.000Z"
+        },
+        "endDate": {
+          "type": "string",
+          "example": "2020-03-20T00:00:00.000Z"
+        }
+      
+      }
+    },
+    "RentalRegisterSchemaBodyPost": {
+      "required": [
+        "idUser",
+        "quantity",
+        "idMovie",
+        "endDate",
+        "value"
+      ],
+      "type": "object",
+      "properties": {
+        "idUser": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "idMovie": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string",
+          "example": "2020-03-20T00:00:00.000Z"
+        },
+        "value": {
+          "type": "number"
+        }
+      }
+    },
+    "RentalRegisterSchemaBodyPut": {
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "idUser": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "idMovie": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string",
+          "example": "2020-03-20T00:00:00.000Z"
+        },
+        "value": {
+          "type": "number"
+        },
+        "action": {
+          "type": "string"
         }
       }
     }
